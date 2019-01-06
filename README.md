@@ -40,12 +40,11 @@ until the connection is successfully established.
 Here is a simple example of instantiating a connection, adding a new document
 into the bucket and then retrieving its contents:
 
+### Couchbase < 4.5
 ```javascript
 var couchbase = require('couchbase');
 var cluster = new couchbase.Cluster('couchbase://127.0.0.1');
-// For Couchbase > 4.5 with RBAC Auth
-cluster.authenticate('username', 'password')
-var bucket = cluster.openBucket('default');
+var bucket = cluster.openBucket('default', 'bucketpassword');
 
 bucket.upsert('testdoc', {name:'Frank'}, function(err, result) {
   if (err) throw err;
@@ -55,6 +54,35 @@ bucket.upsert('testdoc', {name:'Frank'}, function(err, result) {
 
     console.log(result.value);
     // {name: Frank}
+  });
+});
+```
+
+### Couchbase >= 4.5
+
+Hello Couchbase
+```js
+var couchbase = require('couchbase')
+var cluster = new couchbase.Cluster('couchbase://localhost/');
+cluster.authenticate('USERNAME', 'PASSWORD');
+var bucket = cluster.openBucket('bucketname');
+var N1qlQuery = couchbase.N1qlQuery;
+
+bucket.manager().createPrimaryIndex(function() {
+  bucket.upsert('user:frank', {
+    'email': 'frank@dspeed.eu', 'interests': ['Holy Grail', 'Serverless', 'Couchbase', 'JavaScript']
+  },
+  function (err, result) {
+    bucket.get('user:frank', function (err, result) {
+      console.log('Got result: %j', result.value);
+      bucket.query(
+      N1qlQuery.fromString('SELECT * FROM bucketname WHERE $1 in interests LIMIT 1'),
+      ['Couchbase'],
+      function (err, rows) {
+        console.log("Got rows: %j", rows);
+        // Got rows: { 'user:frank': { 'email': 'frank@dspeed.eu', 'interests': ['Holy Grail', 'Serverless', 'Couchbase', 'JavaScript'] }
+      });
+    });
   });
 });
 ```
