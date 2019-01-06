@@ -162,7 +162,7 @@ verifications.  These can be run through `make fasttest` and `make fastcover`
 respectively.
 
 ## License
-Copyright 2013 Couchbase Inc.
+Copyright 2019 Couchbase Inc.
 
 Licensed under the Apache License, Version 2.0.
 
