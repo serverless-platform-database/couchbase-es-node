@@ -118,6 +118,23 @@ bucket.upsert('testdoc', {name:'Frank'}, function(err, result) {
   });
 ```
 
+## Using an external C SDK
+
+The node.js SDK comes with an embedded version of the C SDK in order to streamline the installation experience. It may be necessary to use an external version of the C SDK if you wish to:
+
+- Use SSL connections with Couchbase
+- Use a version of the C SDK contains bug fixes not available in the embedded version
+- Develop the SDK itself and wish to speed up build times
+
+To install the Node.js SDK using an external C SDK installation, install the libcouchbase library first, and point npm to it during the install.
+
+```bash
+# Assuming you have libcouchbase installed in /usr/local
+# such that /usr/local/lib/libcouchbase.so (or .dylib) exists:
+npm install couchbase --compile --couchbase-root=/usr/local
+```
+
+[Additional Infos about the C SDK](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html)
 
 ## Documentation
 
