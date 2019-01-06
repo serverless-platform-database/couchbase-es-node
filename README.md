@@ -75,6 +75,7 @@ bucket.manager().createPrimaryIndex(function() {
   function (err, result) {
     bucket.get('user:frank', function (err, result) {
       console.log('Got result: %j', result.value);
+      // { 'user:frank': { 'email': 'frank@dspeed.eu', 'interests': ['Holy Grail', 'Serverless', 'Couchbase', 'JavaScript'] }
       bucket.query(
       N1qlQuery.fromString('SELECT * FROM bucketname WHERE $1 in interests LIMIT 1'),
       ['Couchbase'],
